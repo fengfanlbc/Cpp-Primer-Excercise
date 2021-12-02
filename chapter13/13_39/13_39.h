@@ -14,7 +14,7 @@ public:
     ~StrVec();
     // 添加一个元素，需要检查当前容量是否足够，不够的话申请一个更大的空间
     // 这里设置一个chk_n_alloc实现
-    void push_back(const std::string);
+    void push_back(const std::string&);
     // 得到当前容器的大小,为什么定义成常量成员函数？
     size_t size() const {
         return first_free - elements;
