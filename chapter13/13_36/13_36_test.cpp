@@ -10,5 +10,8 @@ int main(int argc, char const *argv[])
     m1.save(mailBox);
     m2.save(mailBox);
     mailBox.print_debug();
+
+    Message m3 = std::move(m1);
+    m2 = std::move(m3);
     return 0;
 }

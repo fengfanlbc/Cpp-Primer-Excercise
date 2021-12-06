@@ -31,12 +31,46 @@ Message::Message(const Message& m): content(m.content), folders(m.folders) {
     add_to_folders(m);
 }
 
+// 移动构造函数定义
+Message::Message(Message&& m): content(std::move(m.content)){
+    std::cout << "use move constructor" << std::endl;
+    move_folders(&m);
+}
+
+// 辅助移动构造和移动赋值
+// 将传递的消息从folder 中移出
+// 将传递的消息的folder 内容置空，变为可析构状态
+void Message::move_folders(Message *m){
+    // 直接移动folders指针
+    folders = std::move(m->folders);
+    // 将现有folders 里的m消息删除
+    // 加上现有的新消息
+    for(auto f : folders){
+        f->removeMsg(m);
+        f->addMsg(this);
+    }
+    // 保证移动后的源对象是可析构、销毁的
+    m->folders.clear();
+}
+
 // 拷贝赋值
 Message& Message::operator=(const Message& m) {
+    
     remove_from_folders();
     this->content = m.content;
     this->folders = m.folders;
     add_to_folders(m);
+    return *this;
+}
+
+// 移动赋值
+Message& Message::operator=(Message&& m) {
+    std::cout << "use move assign" << std::endl;
+    if (this != &m) {
+        remove_from_folders();
+        content = std::move(m.content);
+        move_folders(&m);
+    }
     return *this;
 }
 

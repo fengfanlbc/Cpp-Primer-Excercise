@@ -8,8 +8,19 @@ friend void swap(Message& m1, Message& m2);
 public:
     // 构造函数
     explicit Message(const std::string &s = ""):content(s){}
+    
+    // 拷贝构造
     Message(const Message&);
+
+    // 移动构造
+    Message(Message&&);
+
+    // 拷贝赋值
     Message& operator=(const Message&);
+
+    // 移动赋值
+    Message& operator=(Message&&);
+
     // 保存到消息到指定目录
     void save(Folder&);
     // 从指定目录中删除该消息
@@ -25,6 +36,8 @@ private:
     void add_to_folders(const Message&);
 
     void remove_from_folders();
+
+    void move_folders(Message *m);
     
     void addFolder(Folder* f) {
         folders.insert(f);
